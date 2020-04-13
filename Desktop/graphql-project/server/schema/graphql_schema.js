@@ -5,9 +5,12 @@ const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt} =
 
 // dummy data 
 var books = [
-  {name: 'Name of Wind', genre: 'Fantasy',id: '1' , price:'129'},
-  {name: 'The Final Empire', genre: 'Fantasy',id: '2', price:'129'},
-  {name: 'The long Earth', genre: 'Sci-Fi',id: '3', price:'129' }
+  {name: 'Name of Wind', genre: 'Fantasy',id: '1' , price:'129', authorid: '1'},
+  {name: 'The Final Empire', genre: 'Fantasy',id: '2', price:'129', authorid: '2'},
+  {name: 'The long Earth', genre: 'Sci-Fi',id: '3', price:'129', authorid:'3' },
+  {name: 'Hero of Ages', genre: 'Sci-Fi',id: '4', price:'129', authorid:'2' },
+  {name: 'Colour of Magic', genre: 'Fantasy',id: '5', price:'129', authorid:'1' },
+  {name: 'Light fantastic', genre: 'Fantasy',id: '6', price:'129', authorid:'3' }
 ];
 
 var authors =[
@@ -35,7 +38,16 @@ const BookType = new GraphQLObjectType({
     id: {type: GraphQLID},
     name: {type: GraphQLString},
     genre: {type: GraphQLString},
-    price: {type: GraphQLString}
+    price: {type: GraphQLString},
+    author:{
+      type: AuthorType,
+      // resolve func used to get data 
+      // parent stores previous object data
+      // args store current object data
+      resolve(parent, args){
+        return _.find(authors, {id: parent.authorid})
+      }
+    }
   })
 });
 
