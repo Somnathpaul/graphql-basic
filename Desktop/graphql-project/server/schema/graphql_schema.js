@@ -1,9 +1,13 @@
 const graphql = require('graphql');
 const _ = require('lodash');
 
+const Book  = require('../db_model/books');
+const Author = require('../db_model/author');
+
 const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, GraphQLList} = graphql;
 
-// dummy data 
+// dummy data without db 
+/*
 var books = [
   {name: 'Name of Wind', genre: 'Fantasy',id: '1' , price:'129', authorid: '1'},
   {name: 'The Final Empire', genre: 'Fantasy',id: '2', price:'129', authorid: '2'},
@@ -18,6 +22,8 @@ var authors =[
   {name: 'Brandon Sanderson', age: 45, id: '2'},
   {name: 'Terry Pratchetts', age: 47, id: '3'}
 ];
+*/
+
 // for author
 const AuthorType = new GraphQLObjectType({
   name: 'Author',
@@ -29,7 +35,8 @@ const AuthorType = new GraphQLObjectType({
     books: {
       type: new GraphQLList(BookType),
       resolve(parent, args){
-        return _.filter(books, {authorid: parent.id})
+        // use when working with dummy data without db
+        // return _.filter(books, {authorid: parent.id})
       }
     }
   })
@@ -50,9 +57,11 @@ const BookType = new GraphQLObjectType({
       // resolve func used to get data 
       // parent stores previous object data
       // args store current object data
-      resolve(parent, args){
-        return _.find(authors, {id: parent.authorid})
-      }
+
+      // use when working with dummy data without db
+      // resolve(parent, args){
+       // return _.find(authors, {id: parent.authorid})
+      //}
     }
   })
 });
@@ -63,18 +72,22 @@ const RootQuery = new GraphQLObjectType({
     book: {
       type: BookType,
       args: {id: {type:GraphQLID}},
-      resolve(parent, args){
+
+      // use when working with dummy data without db
+      //resolve(parent, args){
         // code to get data from db
-         return _.find(books, {id:args.id});
-      }
+         // return _.find(books, {id:args.id});
+      //}
     },
     authors: {
       type: AuthorType,
       args: {id: {type: GraphQLID}},
-      resolve(parent, args){
+
+      // use when working with dummy data without db
+      //resolve(parent, args){
         // code to get data from db
-        return _.find(authors, {id:args.id} )
-      }
+         //return _.find(authors, {id:args.id} )
+      //}
     }
   }
 })
