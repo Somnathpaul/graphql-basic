@@ -32,6 +32,7 @@ const AuthorType = new GraphQLObjectType({
     id: {type: GraphQLID},
     name: {type: GraphQLString},
     age: {type: GraphQLInt},
+    author_no: {type: GraphQLString},
     books: {
       type: new GraphQLList(BookType),
       resolve(parent, args){
@@ -98,12 +99,42 @@ const Mutation  = new GraphQLObjectType({
     addAuthor: {
       type: AuthorType,
       args: {
-        name: {type: GraphQLString}
+        name: {type: GraphQLString},
+        age: {type: GraphQLInt}
+      },
+      resolve(parent, args){
+        let author = new Author({
+          name: args.name,
+          age: args.age
+        });
+        // save to db and return the parameters
+        return author.save();
+      }
+    },
+    addBooks: {
+      type: BookType,
+      args: {
+        name: {type: GraphQLString},
+        genre: {type: GraphQLString},
+        price: {type: GraphQLString},
+        author_no :{type: GraphQLString}
+      },
+      resolve(parent, args){
+        let book  = new Book({
+          name: args.name,
+          genre: args.genre,
+          price: args.price,
+          author_no: args.author_no
+        });
+        // save to db and return the parameters
+        return book.save();
       }
     }
+    
   }
 })
 
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
